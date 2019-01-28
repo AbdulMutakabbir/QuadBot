@@ -1,15 +1,21 @@
+//files to be included.
 #include <SunFounder_PCA9685.h>
 
+//servo constants
 #define SERVOMIN  500 
 #define SERVOMAX  2500 
-#define MIN1 50
+//minimum and maximum angles allowed b.
+#define MIN1 50y servo
 #define MAX1 150
 #define MIN2 20
 #define MAX2 160
+//base angle of servo.
 #define NORM 90
 
+//address of PCA9685.
 PCA9685 pwm = PCA9685(0x40);
 
+//attaching servo to the PCA9685 channels.
 int servo1_chn = 8;
 int servo2_chn = 9;
 int servo3_chn = 2;
@@ -21,25 +27,26 @@ int servo8_chn = 7;
 
 void setup() {
   Serial.begin(9600);
-
   pwm.begin();
-  Serial.print("begin  ");
+  Serial.print("begin...\n");
   pwm.setFreq(50);
-  // setServo(_min_pulse_width, _max_pulse_width), check them on the servo datasheet
+//setServo(_min_pulse_width, _max_pulse_width), check them on the servo datasheet
   pwm.setServo(SERVOMIN, SERVOMAX);
-/*
-  pwm.angleWrite(servo1_chn,90);
-  pwm.angleWrite(servo2_chn,90);
-  pwm.angleWrite(servo3_chn,180);
-  pwm.angleWrite(servo4_chn,90);
-  pwm.angleWrite(servo5_chn,180);
-  pwm.angleWrite(servo6_chn,0);
-  pwm.angleWrite(servo7_chn,180);
-  pwm.angleWrite(servo8_chn,0);
-  delay(200);
-  Serial.println("angle 90");
-*/}
 
+  //init servo
+  pwm.angleWrite(servo1_chn,NORM);
+  pwm.angleWrite(servo2_chn,NORM);
+  pwm.angleWrite(servo3_chn,NORM);
+  pwm.angleWrite(servo4_chn,NORM);
+  pwm.angleWrite(servo5_chn,NORM);
+  pwm.angleWrite(servo6_chn,NORM);
+  pwm.angleWrite(servo7_chn,NORM);
+  pwm.angleWrite(servo8_chn,NORM);
+  delay(200);
+  Serial.println("Setting all to Servo to 90");
+}
+
+//function for specifing angles of each servo
 void goto_pos(int n1,int n2,int n3,int n4,int n5,int n6,int n7,int n8)
 {
   pwm.angleWrite(servo5_chn,n5);
@@ -59,36 +66,45 @@ void goto_pos(int n1,int n2,int n3,int n4,int n5,int n6,int n7,int n8)
   pwm.angleWrite(servo4_chn,n4);
   delay(20);
 }
+
 void normal()
 {
   goto_pos(NORM,NORM,NORM,NORM,NORM,NORM,NORM,NORM);
-  Serial.println("Normalizing...\n");
+  Serial.println("Normalizing...");
   delay(100);
 }
+
 void sit()
 {
   goto_pos(NORM,NORM,NORM,NORM,MAX1,MIN1,MAX1,MIN1);
-  Serial.println("Sitting\n");
+  Serial.println("Sitting");
   delay(100);
 }
+
 void stand()
 {
   goto_pos(NORM,NORM,NORM,NORM,MIN1,MAX1,MIN1,MAX1);
-  Serial.println("Standing\n");
+  Serial.println("Standing");
   delay(100);
 }
+
+//look right
 void look_r()
 {  
   goto_pos(MIN2,MIN2,MIN2,MIN2,NORM,NORM,NORM,NORM);
-  Serial.println("Looking Rignt\n");
+  Serial.println("Looking Rignt");
   delay(700);
 }
+
+//look left
 void look_l()
 {
   goto_pos(MAX2,MAX2,MAX2,MAX2,NORM,NORM,NORM,NORM);
-  Serial.println("Looking Rignt\n");
+  Serial.println("Looking Rignt");
   delay(700);
 }
+
+//turn right
 void turn_r()
 { 
   goto_pos(MIN2,MIN2,MIN2,MIN2,NORM,NORM,NORM,NORM);
@@ -100,6 +116,8 @@ void turn_r()
   normal();
   Serial.println("Turning Right");
 }
+
+//turn left
 void turn_l()
 { 
   goto_pos(MAX2,MAX2,MAX2,MAX2,NORM,NORM,NORM,NORM);
@@ -112,18 +130,21 @@ void turn_l()
   Serial.println("Turning Left");
   delay(100);
 }
+
 void defence_h()
 {
   goto_pos(NORM+45,NORM-45,NORM+45,NORM-45,NORM,NORM,NORM,NORM);
   Serial.println("Defence Position Horizontal");
   delay(300);
 }
+
 void defence_v()
 {
   goto_pos(NORM-45,NORM+45,NORM-45,NORM+45,NORM,NORM,NORM,NORM);
   Serial.println("Defence Position Vetical");
   delay(300);
 }
+
 void forward()
 {
   goto_pos(NORM,NORM-45,NORM+45,NORM,NORM,NORM,MIN1,NORM);
@@ -139,12 +160,14 @@ void forward()
   goto_pos(NORM+10,NORM-45,NORM-10,NORM,NORM-10,MAX1,MAX1,NORM-10);
   delay(300);
 }
+
 void bow_right()
 {
   goto_pos(NORM+45,NORM-45,NORM+45,NORM-45,MIN1,MIN1,MAX1,MAX1);
   Serial.println("Bowing Right");
   delay(700);
 }
+
 void bow_left()
 {
   goto_pos(NORM+45,NORM-45,NORM+45,NORM-45,MAX1,MAX1,MIN1,MIN1);
@@ -157,12 +180,15 @@ void bow_forward()
   Serial.println("Bowing left");
   delay(150);
 }
+
 void bow_backward()
 {
   goto_pos(NORM+45,NORM-45,NORM+45,NORM-45,MIN1,MAX1,MAX1,MIN1);
   Serial.println("Bowing left");
   delay(150);
 }
+ 
+//say hi 
 void hi()
 { 
   goto_pos(NORM-45,MAX2,MAX2,NORM-45,NORM,MAX1,MIN1,MAX1);
@@ -182,51 +208,36 @@ void hi()
   Serial.println("Hi!");
 }
 
-
-
-void f()
-{
-  goto_pos(90,45,135,90,180,0,180,0);
-  delay(200);
-  goto_pos(90,90,135,90,180,45,180,0);
-  delay(200);
-  goto_pos(135,90,90,110,180,0,180,20);
-  delay(200);
-  goto_pos(135,90,90,45,180,0,180,0);
-  delay(200);
-  goto_pos(90,90,90,45,135,0,180,0);
-  delay(200);
-  goto_pos(90,45,60,90,180,0,160,0);
-  delay(200);
-}
-
-
-
-
 void loop() {
-  //defence_v();
-  //defence_h();
-  //look_r();
-  //look_l();
-  //sit();
-  //stand();
-  //forward();
-  //backward();
-  //turn_r();
-  //turn_l();
+  normal();
+  delay(500);
+  defence_v();
+  delay(500);
+  defence_h();
+  delay(500);
+  look_r();
+  delay(500);
+  look_l();
+  delay(500);
+  sit();
+  delay(500);
+  stand();
+  delay(500);
+  forward();
+  delay(500);
+  turn_r();
+  delay(500);
+  turn_l();
+  delay(500);
   bow_right();
-  //bow_left();
-  //bow_forward();
-  //bow_backward();
-  //normal();
-  //hi();
-  //f();
-/*
-pwm.angleWrite(servo3_chn,90);
-  delay(400);
-pwm.angleWrite(servo3_chn,180);
-  delay(400);
-*/
-
-
+  delay(500);
+  bow_left();
+  delay(500);
+  bow_forward();
+  delay(500);
+  bow_backward();
+  delay(500);
+  hi();
+  delay(500);
+  
 }
