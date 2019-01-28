@@ -1,7 +1,8 @@
 # QuadBot
-aka # Robot Pet
+# Robot Pet
+# Quadrapet
 
->>this project is currently under development;
+-->this project is currently under development
 
 >>Link to download stl files:
     https://www.thingiverse.com/thing:152638
